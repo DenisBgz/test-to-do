@@ -1,0 +1,5 @@
+/* Скругляем концы и стыки линий всех значков. */
+.icon {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

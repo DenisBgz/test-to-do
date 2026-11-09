@@ -1,0 +1,15 @@
+# Установленные зависимости и результаты сборки
+node_modules/
+/dist/
+/Открыть.html
+*.tsbuildinfo
+
+# Локальные настройки окружения
+.env
+.env.*
+!.env.example
+
+# Журналы и системные файлы
+*.log
+.DS_Store
+Thumbs.db

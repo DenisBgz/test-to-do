@@ -1,0 +1,72 @@
+.form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+/* Поле занимает свободную ширину рядом с кнопкой и может сжиматься на телефоне. */
+.form input {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--control-line);
+  border-radius: 6px;
+  background: var(--canvas);
+  color: var(--ink);
+  font-size: var(--task-font-size);
+  line-height: 22px;
+}
+
+.form input::placeholder {
+  color: var(--muted);
+}
+
+.form input:focus {
+  outline: none;
+}
+
+/* При переходе клавишей Tab обозначаем фокус нейтральной рамкой. */
+.form input:focus-visible:not([data-quiet-focus]) {
+  border-color: var(--muted);
+}
+
+.form button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 14px;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--canvas);
+  font-size: 14px;
+  font-weight: 550;
+}
+
+.form button:hover {
+  background: var(--control-hover);
+}
+
+.form svg {
+  width: 16px;
+}
+
+@media (max-height: 480px) {
+  .form {
+    margin-bottom: 6px;
+  }
+}
+
+/* На самом узком экране оставляем на кнопке только значок. */
+@media (max-width: 400px) {
+  .form button {
+    width: 42px;
+    padding: 0;
+  }
+
+  .form button span {
+    display: none;
+  }
+}

@@ -1,0 +1,102 @@
+.taskTitle {
+  position: relative;
+  min-width: 0;
+  flex: 1;
+  overflow-wrap: anywhere;
+  font-size: var(--task-font-size);
+  line-height: 22px;
+}
+
+.taskTitle[data-done] {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+/* Копия движется поверх интерфейса. Точка старта и расстояние до строки приходят из TaskTitle. */
+.flyingText {
+  --flight-time: 420ms;
+  position: absolute;
+  z-index: 2;
+  width: var(--label-width);
+  color: var(--ink);
+  font-size: var(--task-font-size);
+  line-height: 22px;
+  pointer-events: none;
+  user-select: none;
+  animation: travel var(--flight-time) cubic-bezier(0.22, 0.58, 0.25, 1) both;
+}
+
+/* Сохраняем видимый в поле фрагмент длинной строки. Во время полёта он уступает место тексту с переносами. */
+.inputCopy {
+  position: absolute;
+  inset: 0 auto auto 0;
+  overflow: hidden;
+  white-space: pre;
+  animation: release var(--flight-time) linear both;
+}
+
+.inputCopy > span {
+  display: block;
+}
+
+.labelCopy {
+  display: block;
+  overflow-wrap: anywhere;
+  animation: arrive var(--flight-time) linear both;
+}
+
+/* Если строка выглядит одинаково в обеих точках, показываем одну копию на всём пути. */
+.flyingText[data-same-line] .inputCopy {
+  display: none;
+}
+
+.flyingText[data-same-line] .labelCopy {
+  animation: none;
+}
+
+.reservedText {
+  opacity: 0;
+}
+
+/* На время перелёта скрываем подсказку, чтобы она не просвечивала сквозь улетающий текст. */
+:global(body):has(.flyingText) :global(input)::placeholder {
+  opacity: 0;
+}
+
+@keyframes travel {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(var(--travel-x), var(--travel-y), 0);
+  }
+}
+
+@keyframes release {
+  0%, 42% {
+    opacity: 1;
+  }
+
+  84%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes arrive {
+  0%, 42% {
+    opacity: 0;
+  }
+
+  84%, 100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flyingText,
+  .inputCopy,
+  .labelCopy {
+    animation-duration: 1ms;
+  }
+}

@@ -1,0 +1,66 @@
+.burst {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Отражаем траектории левого залпа относительно края шкалы. */
+.left {
+  left: 0;
+  transform: scaleX(-1);
+}
+
+.right {
+  right: 0;
+}
+
+.piece {
+  position: absolute;
+  top: -3px;
+  right: 0;
+  width: 4px;
+  height: 7px;
+  border-radius: 1px;
+  animation: scatter 950ms var(--delay) both;
+}
+
+.piece:nth-child(3n) {
+  height: 4px;
+  border-radius: 50%;
+}
+
+/* Частицы быстро поднимаются до вершины дуги, затем медленнее опускаются и постепенно исчезают. */
+@keyframes scatter {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.55);
+    animation-timing-function: ease-out;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  34.5% {
+    transform: translate3d(var(--crest-x), var(--crest-y), 0) rotate(calc(var(--spin) / 2));
+    animation-timing-function: ease-in;
+  }
+
+  62% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--x), var(--landing-y), 0) rotate(var(--spin)) scale(0.7);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .piece {
+    visibility: hidden;
+    animation-delay: 0ms;
+    animation-duration: 1ms;
+  }
+}

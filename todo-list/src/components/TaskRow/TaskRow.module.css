@@ -1,0 +1,191 @@
+.task {
+  display: flex;
+  position: relative;
+  padding: 12px 0;
+  align-items: center;
+  gap: 13px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+/* Нативный флажок принимает нажатия и фокус, его видимое оформление рисует соседний элемент. */
+.task input {
+  position: absolute;
+  opacity: 0;
+  width: 22px;
+  height: 22px;
+}
+
+.box {
+  position: relative;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 21px;
+  height: 21px;
+  border: 1px solid #999;
+  border-radius: 4px;
+}
+
+.box svg {
+  width: 17px;
+  stroke-width: 2.2;
+}
+
+/* Длина штриха равна длине контура галочки. Смещение сначала полностью скрывает его. */
+.box path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+}
+
+.task input:checked + .box {
+  background: var(--ink);
+  color: var(--canvas);
+  border-color: var(--ink);
+}
+
+.task input:checked + .box path {
+  stroke-dashoffset: 0;
+  opacity: 1;
+}
+
+.task input:focus-visible + .box {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.remove {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.remove svg {
+  width: 18px;
+}
+
+.remove:hover {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.exiting {
+  animation: removeRow 180ms ease-in both;
+}
+
+/* При выходе из текущего фильтра задача быстро исчезает на месте. */
+.filterExit {
+  animation: fadeOut 160ms ease-out both;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes removeRow {
+  to {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .entering {
+    animation: enterRow 240ms ease-out;
+  }
+
+  .box[data-pressed] {
+    animation: bubble 360ms ease-out;
+  }
+
+  .box[data-pressed]::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border: 1px solid var(--muted);
+    border-radius: inherit;
+    pointer-events: none;
+    animation: ripple 340ms ease-out both;
+  }
+
+  .task input:checked + .box[data-pressed] path {
+    animation: drawCheck 240ms ease-out both;
+  }
+}
+
+/* Краткое сжатие и растяжение флажка создают эффект пузырька. */
+@keyframes bubble {
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  20% {
+    transform: scale(0.84, 0.88);
+  }
+
+  52% {
+    transform: scale(1.18, 1.12);
+  }
+
+  78% {
+    transform: scale(0.97, 1.02);
+  }
+}
+
+@keyframes ripple {
+  from {
+    opacity: 0.45;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes drawCheck {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes enterRow {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* Минимальная длительность сохраняет событие завершения, по которому React удаляет строку. */
+@media (prefers-reduced-motion: reduce) {
+  .exiting,
+  .filterExit {
+    visibility: hidden;
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+}

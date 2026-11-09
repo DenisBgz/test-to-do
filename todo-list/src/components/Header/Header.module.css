@@ -1,0 +1,46 @@
+/* Заголовок и выбор темы делят одну строку и могут переноситься при нехватке места. */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 48px);
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: -0.055em;
+}
+
+.date {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.date svg {
+  width: 15px;
+}
+
+/* В низком окне уменьшаем шапку, чтобы оставить место задачам. */
+@media (max-height: 480px) {
+  .header {
+    padding-bottom: 6px;
+  }
+
+  .header h1 {
+    font-size: 26px;
+  }
+
+  .date {
+    margin-top: 3px;
+  }
+}
